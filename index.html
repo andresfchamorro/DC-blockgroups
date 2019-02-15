@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<!-- <input id=year1 type="button" class="btn btn-outline-dark" aria-pressed="true" value="2006-2009">
+<input id=year2 type="button" class="btn btn-outline-dark focus" aria-pressed="true" value="2012-2016"> -->
+<div id=all>
+  <div id=legend_container>
+    <span id=neighborhood_name></span>
+    <span id=block_name>Click on a block group to see changes</span>
+  </div>
+  <div id=map_container>
+    <div id="tooltip" class="hidden">
+      <p><span id="tooltip_name"></span></p>
+      <p>2009: <span id="tooltip_09"></span></p>
+      <p>2016: <span id="tooltip_16"></span></p>
+      <!-- <p>
+      Petal length: <span id="petal_length"></span><br />
+      Petal width: <span id="petal_width"></span><br />
+      Sepal length: <span id="sepal_length"></span><br />
+      Sepal width: <span id="sepal_width"></span><br /> -->
+      </p>
+    </div>
+  </div>
+<!-- <svg id=map_container width="1000" height="800"></svg> -->
+</div>
+
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" type="text/css" href="css/style.css"/>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"> -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/css/bootstrap-select.min.css">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/js/bootstrap-select.min.js"></script> -->
+
+
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script src="https://d3js.org/d3-selection-multi.v0.4.min.js"></script>
+<script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+<script src="https://d3js.org/topojson.v2.min.js"></script>
+<script src="js/map.js"></script>

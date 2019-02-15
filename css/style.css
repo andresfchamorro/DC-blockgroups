@@ -1,0 +1,133 @@
+@font-face {
+    font-family: "Arial MT Std";
+    src: url(https://gfw2-data.s3.amazonaws.com/fires/d3/Dashboard/ArialMTStd-LightCond.otf) format("opentype");
+    font-weight: normal;
+}
+@font-face {
+    font-family: "Firas";
+    src: url(https://gfw2-data.s3.amazonaws.com/fires/d3/Dashboard/FiraSans-Regular.otf) format("opentype");
+    font-weight: normal;
+}
+#year1{
+  position: absolute;
+  top: 70px;
+  left: 50px;
+}
+#year2{
+  position: absolute;
+  top: 70px;
+  left: 180px;
+}
+#map_container svg{
+  display: block;
+  margin: auto;
+}
+#legend_container{
+  position: absolute;
+  right: 20px;
+  top: 20px
+  /* box-shadow: 0 0 0 0.2rem rgba(52,58,64,.5); */
+}
+.key {
+  /* opacity:0.5 */
+  /* background-color: gray; */
+  margin-top: 10px;
+  border-radius: 10px;
+  /* border: solid 0.5px; */
+  /* border: double; */
+  /* rx: 10;
+  ry: 10; */
+  /* stroke: #343a40;
+  stroke-width: 0.5; */
+}
+svg image {
+  pointer-events: none;
+}
+
+.key:hover {
+  background-color: #343a40;
+}
+.bg{
+  stroke: #F0F0F0;
+  stroke-width: 0.5px;
+  stroke-linejoin: round;
+}
+.bg:hover{
+  stroke-width: 4px;
+  stroke: yellow;
+  opacity: 0.5;
+}
+.selected {
+  stroke-width: 4px;
+  stroke: yellow;
+}
+.bg_outline{
+  /* stroke: #F0F0F0;
+  stroke-width: 0.5px;
+  stroke-linejoin: round; */
+  fill: white;
+  opacity: 0;
+}
+.bg_outline:hover{
+  stroke-width: 2px;
+  stroke: #383838;
+  opacity: 0.5;
+}
+/* .bg_foc{
+  stroke-width: 2px;
+  stroke: black;
+} */
+.label_hoods{
+  /* z-index: 1; */
+  text-shadow: 1px 1px 2px white;
+  fill: #383838;
+  opacity: 1;
+  font-size: 10px;
+  font-weight: 200;
+  text-anchor: middle;
+  /* text-transform: uppercase; */
+  letter-spacing: 0.05px;
+  font-family: "Firas","Arial MT Std", Helvetica, sans-serif, Arial;
+  pointer-events: none;
+}
+.trend {
+  fill: none;
+  stroke: #404040;
+  stroke-width: 3px;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+.tick line {
+  stroke: lightgray
+}
+.marker{
+  fill: #404040;
+  /* stroke-width: 2px; */
+}
+#block_name {
+  display: inline;
+  color: gray;
+}
+#neighborhood_name {
+  display: inline;
+}
+#tooltip{
+  position:absolute;
+  width:150px;
+  height:auto;
+  padding:10px;
+  background-color: rgba(0,0,0,0.5);
+  border-radius:10px;
+  /* box-shadow: 4px 4px 10px rgba(0,0,0,0.4); */
+  box-shadow: 0 0 0 0.2rem rgba(52,58,64,.5);
+  pointer-events: none;
+}
+#tooltip p{
+  margin:0;
+  font-family: sans-serif;
+  font-size:12px;
+  color: white;
+}
+#tooltip.hidden{
+  display:none;
+}

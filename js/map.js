@@ -1,6 +1,8 @@
 
-var map_width = +1000,
+var map_width = +600,
     map_height = +800;
+// var map_width = +700,
+//     map_height = +700;
 
 var leg_width = +400,
     leg_height = +350;
@@ -10,16 +12,29 @@ var map_svg = d3.select("#map_container")
   .attr("width", map_width)
   .attr("height", map_height);
 
-// var legend_div = d3.select("#legend_container")
-//   .append("div")
-//   .attr("width", leg_width)
-//   .attr("height", leg_height);
+var map_svg_g = map_svg.append("g");
 
 var proj = d3.geoConicConformal()
   .parallels([38 + 18 / 60, 39 + 27 / 60])
   .rotate([77, 0])
-  .center([0, 38.93])
+  .center([0.05, 38.93])
   .scale(200000);
+
+const zoom = d3.zoom()
+  .scaleExtent([1, 1.5])
+  .on('zoom', zoomed);
+
+map_svg.call(zoom);
+
+// function zoomed() {
+//   g.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+// };
+
+function zoomed() {
+  map_svg_g
+    // .selectAll(".zoomable") // To prevent stroke width from scaling
+    .attr('transform', d3.event.transform);
+}
 
 // var proj = d3.geoConicConformal()
 //     .rotate([77, 0])
@@ -54,58 +69,18 @@ var x_val = d3.scaleLinear()
 
 var y_change = d3.scaleLinear()
     .domain([-1,1])
-    .rangeRound([250, 0]);
+    .rangeRound([180, 0]);
 
 var range_per = d3.range(10,100,10);
-// var range_inc = d3.range(32000,240000,32000);
-
-var range_inc = d3.range(20000,240000,25000)
-//var range_inc = d3.range(20000,240000,20000);
-
+var range_inc = d3.range(20000,240000,25000);
 var range_rent = d3.range(400,3100,300);
-// var range_rent = d3.range(400,3200,400);
-
 var range_val = d3.range(400000,1800000,160000);
-// var range_val = d3.range(400000,1800000,200000);
-
-// var color_per = d3.scaleThreshold()
-//     .domain(d3.range(20,90,10))
-//     .range(d3.schemeBlues[8]);
-//
-// var color_per2 = d3.scaleThreshold()
-//     .domain(d3.range(20,90,10))
-//     .range(d3.schemeReds[8]);
-//
-// var color_inc = d3.scaleThreshold()
-//     .domain(d3.range(32000,240000,32000))
-//     .range(d3.schemeGreens[8]);
-//
-// var color_rent = d3.scaleThreshold()
-//     .domain(d3.range(400,3200,400))
-//     .range(d3.schemeOranges[8]);
-//
-// var color_val = d3.scaleThreshold()
-//     .domain(d3.range(400000,1800000,200000))
-//     .range(d3.schemeBrBG[8]);
-
-// var color_change = d3.scaleThreshold()
-//     .domain(d3.range(-1,1.2,0.2))
-//     .range(d3.schemeRdYlGn[11]);
-
-// var interpolate_col = d3.scaleLinear()
-//   .domain([-1,1])
-//   .range([d3.color("#B2771E"), d3.color('#0C6BB2')])
-//   .interpolate(d3.interpolateHcl);
-
-// d3.interpolateInferno(t)
 
 var rescaleInferno = d3.scaleLinear()
     .domain([-1,1])
     .range([0.2,1]);
 
 var color_array = [];
-//var col_range = d3.range(-1,1.2,0.2);
-
 var col_range = [-1,-0.5,-0.25,0,0.25,0.5,1];
 
 for (each in col_range) {
@@ -122,8 +97,6 @@ var color_change = d3.scaleThreshold()
     .domain(col_range)
     .range(newscheme);
 
-var data, bbox;
-
 var sel_year = "16";
 var sel_indicator;
 
@@ -135,20 +108,9 @@ indicators['rent'] = ["Median Rent","rent_",160,range_rent,x_rent,formatLong];
 indicators['value'] = ["Median House Value","value_",220,range_val,x_val,formatK];
 indicators['income'] = ["Median Annual Income","income_",280,range_inc,x_inc,formatK];
 
-// var legend_div = d3.select("#map_container")
-//   .append("div")
-//   .attr("width", 200)
-//   .attr("height", 450)
-//   .attr("class","legend");
-
-// var legend_svg = d3.select("#map_container")
-//   .append("svg")
-//   .attr("width", 200)
-//   .attr("height", 450)
-//   .attr("class","legend");
-
 var g_legend = map_svg.append("g")
-    .attr("transform", "translate(175," + "420" + ")")
+    // .attr("transform", "translate(175," + "420" + ")")
+    .attr("transform", "translate(530," + "80" + ")")
     .attr("class","legend");
 
 g_legend.call(d3.axisLeft(y_change)
@@ -173,8 +135,29 @@ g_legend.selectAll("rect")
     .attr("y", function(d) { return y_change(d[1]); })
     .attr("height", function(d) { return y_change(d[0]) - y_change(d[1]); })
     .attr("fill", function(d) { return color_change(d[0]); });
-    // .attr("class",indicator_class);
 
+g_legend.append("text")
+    .attr("class", "caption")
+    .attr("x", "-120")
+    .attr("y", "-40")
+    .attr("fill", "#000")
+    .attr("text-anchor", "start")
+    .attr("font-weight", "bold")
+    .attr("font-size","14px")
+    .text('% change from')
+    .attr("pointer-events","none")
+    .style("background-color","red");
+
+g_legend.append("text")
+    .attr("class", "caption")
+    .attr("x", "-120")
+    .attr("y", "-20")
+    .attr("fill", "#000")
+    .attr("text-anchor", "start")
+    .attr("font-weight", "bold")
+    .attr("font-size","14px")
+    .text('2009 to 2016')
+    .attr("pointer-events","none");
 
 function createLegend(indicator){
 
@@ -201,12 +184,6 @@ function createLegend(indicator){
   var g = indicator_svg.append("g")
       .attr("transform", "translate(10," + "25" + ")");
       // .attr("class", indicator_class);
-
-  // var indicator_box = g.append("rect")
-  //   .attr("class",indicator_class+" key")
-  //   .attr("transform", "translate(-10," + -20 + ")")
-  //   .attr("width", 280)
-  //   .attr("height", 55);
 
   g.call(d3.axisBottom(x_scale)
       .tickSize(18)
@@ -333,15 +310,8 @@ function updateChoro(indicator){
   sel_indicator = indicator;
   indicator_t2 = var_name+"16";
   indicator_t1 = var_name+"09";
-  // if(sel_year="16"){
-  //   otheryear = "09";
-  // }
-  // else {
-  //   otheryear = "16";
-  // }
-  // indicator_otherval = var_name+otheryear;
 
-  bg = map_svg.selectAll(".bg")
+  bg = map_svg_g.selectAll(".bg")
     .style("fill",function(d){
       if(+d.properties[indicator_t1]==0 || +d.properties[indicator_t2]==0 ){
         return "#DEDEDE";
@@ -430,13 +400,16 @@ d3.queue()
     .await(ready);
 
 function ready(error, blocks, hoods) {
-  // bbox = blocks.bbox;
+
+  features_bg = topojson.feature(blocks, blocks.objects.bg_09_16_sj);
+  bbox = path.bounds(features_bg);
+  console.log(bbox);
 
   if (error) throw error;
 
-  map_svg.append("g")
+  map_svg_g.append("g")
     .selectAll("path")
-    .data(topojson.feature(blocks, blocks.objects.bg_09_16_sj).features)
+    .data(features_bg.features)
     .enter().append("path")
       .attr("d", path)
       .attr("class","bg")
@@ -459,6 +432,9 @@ function ready(error, blocks, hoods) {
         format = indicators[sel_indicator][5];
         indicator_t2 = var_name+"16";
         indicator_t1 = var_name+"09";
+        val_t1 = +d.properties[indicator_t1]==0 ? false : +d.properties[indicator_t1];
+        val_t2 = +d.properties[indicator_t2]==0 ? false : +d.properties[indicator_t2];
+        delta = (+d.properties[indicator_t1]==0 || +d.properties[indicator_t2]==0) ? false : (d.properties[indicator_t2] - d.properties[indicator_t1]) / d.properties[indicator_t1];
 
         d3.select("#tooltip")
           .classed("hidden",false)
@@ -467,26 +443,61 @@ function ready(error, blocks, hoods) {
         d3.select("#tooltip_name")
           .text(d.properties.NAME+", BG "+d.properties.BLKGRPCE);
         d3.select("#tooltip_09")
-          .text(format(Math.round(+d.properties[indicator_t1])));
+          .text(function(){
+            if(val_t1){
+              return format(Math.round(val_t1));
+            }
+            else{
+              return "not available";
+            }
+          })
         d3.select("#tooltip_16")
-          .text(format(Math.round(+d.properties[indicator_t2])));
+          .text(function(){
+            if(val_t2){
+              return format(Math.round(val_t2));
+            }
+            else{
+              return "not available";
+            }
+          })
+          d3.select("#tooltip_delta")
+            .text(function(){
+              if(delta){
+                if(Math.round(delta*100)>0){
+                  return(Math.round(delta*100)+" %↑")
+                }
+                if(Math.round(delta*100)<0){
+                  return(Math.round(delta*100)+" %↓")
+                }
+                if(Math.round(delta*100)==0){
+                  return(Math.round(delta*100)+" %")
+                }
+              }
+            })
+          .style("color", function(){
+            if(delta){
+              return color_change(delta);
+            }
+          });
       })
       .on("mouseout", function(){
         d3.select("#tooltip")
           .classed("hidden", true);
-      });
+      })
+      .classed("zoomable","true");
 
 
-  map_svg.append("svg:image")
+  map_svg_g.append("svg:image")
     .attrs({
       'xlink:href': 'data/Roads_Pretty-02.png',
-      x: 154.18525009240216,
-      y: 19.95578578885761,
+      x: bbox[0][0],
+      y: bbox[0][1],
       width: 572.3,
       opacity: 0.6
-    });
+    })
+    .classed("zoomable","true");
 
-  g_labels = map_svg.append("g")
+  g_labels = map_svg_g.append("g")
 
   hoods = g_labels.selectAll(".label_hoods")
     .data(hoods.features)
@@ -498,7 +509,8 @@ function ready(error, blocks, hoods) {
     })
     .text(function(d){
       return d.properties.NAME;
-    });
+    })
+    .classed("zoomable","true");
 
   updateChoro("homeownership");
 

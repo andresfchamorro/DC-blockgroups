@@ -1,5 +1,5 @@
 
-var map_width = +600,
+var map_width = +550,
     map_height = +800;
 // var map_width = +700,
 //     map_height = +700;
@@ -10,7 +10,8 @@ var leg_width = +400,
 var map_svg = d3.select("#map_container")
   .append("svg")
   .attr("width", map_width)
-  .attr("height", map_height);
+  .attr("height", map_height)
+  .attr("id","map_svg");
 
 var map_svg_g = map_svg.append("g");
 
@@ -69,7 +70,7 @@ var x_val = d3.scaleLinear()
 
 var y_change = d3.scaleLinear()
     .domain([-1,1])
-    .rangeRound([180, 0]);
+    .rangeRound([150, 0]);
 
 var range_per = d3.range(10,100,10);
 var range_inc = d3.range(20000,240000,25000);
@@ -110,7 +111,7 @@ indicators['income'] = ["Median Annual Income","income_",280,range_inc,x_inc,for
 
 var g_legend = map_svg.append("g")
     // .attr("transform", "translate(175," + "420" + ")")
-    .attr("transform", "translate(530," + "80" + ")")
+    .attr("transform", "translate(120," + "440" + ")")
     .attr("class","legend");
 
 g_legend.call(d3.axisLeft(y_change)
@@ -130,7 +131,7 @@ g_legend.selectAll("rect")
       return d;
     }))
   .enter().append("rect")
-    .attr("width", 20)
+    .attr("width", 15)
     .attr("x","-10px")
     .attr("y", function(d) { return y_change(d[1]); })
     .attr("height", function(d) { return y_change(d[0]) - y_change(d[1]); })

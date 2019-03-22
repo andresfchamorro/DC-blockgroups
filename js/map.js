@@ -1,11 +1,8 @@
 
-var map_width = +550,
-    map_height = +800;
+var map_width = +800,
+    map_height = +850;
 // var map_width = +700,
 //     map_height = +700;
-
-var leg_width = +400,
-    leg_height = +350;
 
 var map_svg = d3.select("#map_container")
   .append("svg")
@@ -18,14 +15,14 @@ var map_svg_g = map_svg.append("g");
 var proj = d3.geoConicConformal()
   .parallels([38 + 18 / 60, 39 + 27 / 60])
   .rotate([77, 0])
-  .center([0.05, 38.93])
+  .center([0.04, 38.95])
   .scale(200000);
 
 const zoom = d3.zoom()
   .scaleExtent([1, 1.5])
   .on('zoom', zoomed);
 
-map_svg.call(zoom);
+// map_svg.call(zoom);
 
 // function zoomed() {
 //   g.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
@@ -119,7 +116,7 @@ indicators['income'] = ["Median Annual Income","income_",280,range_inc,x_inc,for
 
 var g_legend = map_svg.append("g")
     // .attr("transform", "translate(175," + "420" + ")")
-    .attr("transform", "translate(120," + "440" + ")")
+    .attr("transform", "translate(140," + "480" + ")")
     .attr("class","legend");
 
 g_legend.call(d3.axisLeft(y_change)
@@ -318,6 +315,11 @@ function updateAllCircles(bg_data){
   for (each in indicators){
     updateCircles(each,bg_data);
   }
+  d3.selectAll("#neighborhood_name")
+  .text(bg_data.properties.NAME+',');  
+  d3.selectAll("#block_name")
+    .text(" "+bg_data.properties.NAMELSAD);
+
 }
 
 function updateCircles(indicator,bg_data){
@@ -408,10 +410,6 @@ function ready(error, blocks, hoods) {
           .classed("selected",false);
         d3.select(this)
           .classed("selected",true);
-        d3.selectAll("#neighborhood_name")
-          .text(d.properties.NAME+',');
-        d3.selectAll("#block_name")
-          .text(" "+d.properties.NAMELSAD);
         updateAllCircles(d);
       })
       .on("mouseover", function(d){
@@ -475,6 +473,15 @@ function ready(error, blocks, hoods) {
       })
       .classed("zoomable","true");
 
+  map_svg_g.append("svg:image")
+    .attrs({
+      'xlink:href': 'data/water.png',
+      x: bbox[0][0],
+      y: bbox[0][1],
+      width: 572.3,
+      opacity: 0.8
+    })
+    .classed("zoomable","true");
 
   map_svg_g.append("svg:image")
     .attrs({
@@ -502,5 +509,6 @@ function ready(error, blocks, hoods) {
     .classed("zoomable","true");
 
   updateChoro("homeownership");
+  updateAllCircles(features_bg.features[100]);
 
 }

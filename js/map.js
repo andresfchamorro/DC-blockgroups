@@ -91,12 +91,20 @@ for (each in col_range) {
 }
 
 // d3.schemePuOr[8]
-var newscheme = ["#0f354a","#4881a1","#7eb7d6","#c0ecff",
+var scheme_pu_or = d3.schemePuOr[8]
+var scheme_pi_gr = d3.schemePiYG[8]
+var scheme_pu_gr = d3.schemePRGn[8]
+var scheme_br_bg = d3.schemeBrBG[8]
+
+
+var scheme_brown_blue = ["#0f354a","#4881a1","#7eb7d6","#c0ecff",
 "#f7e1d7","#febc99","#aa6c4f","#410302"]
+var scheme_pi_gr2 = ['#8e0152','#c51b7d','#f1b6da','#fde0ef',
+'#e6f5d0','#b8e186','#4d9221','#276419']
 
 var color_change = d3.scaleThreshold()
     .domain(col_range)
-    .range(newscheme);
+    .range(scheme_pi_gr2);
 
 var sel_year = "16";
 var sel_indicator;
@@ -179,7 +187,7 @@ function createLegend(indicator){
     });
 
   var indicator_svg = indicator_div.append("svg")
-      .attr("width", 340)
+      .attr("width", 320)
       .attr("height", 55);
 
   var g = indicator_svg.append("g")
@@ -195,20 +203,6 @@ function createLegend(indicator){
     .select(".domain")
       .remove();
 
-  // g.selectAll("rect")
-  //   .data(color_scale.range().map(function(d) {
-  //       d = color_scale.invertExtent(d);
-  //       if (d[0] == null) d[0] = x_scale.domain()[0];
-  //       if (d[1] == null) d[1] = x_scale.domain()[1];
-  //       return d;
-  //     }))
-  //   .enter().append("rect")
-  //     .attr("height", 14)
-  //     .attr("x", function(d) { return x_scale(d[0]); })
-  //     .attr("width", function(d) { return x_scale(d[1]) - x_scale(d[0]); })
-  //     .attr("fill", function(d) { return color_scale(d[0]); });
-      // .attr("class",indicator_class);
-
   g.append("text")
       .attr("class", "caption")
       .attr("x", x_scale.range()[0])
@@ -221,23 +215,18 @@ function createLegend(indicator){
       .attr("class",indicator_class+" key_text")
       .attr("pointer-events","none");
 
-  // d3.selectAll("."+indicator_class).on("click", function(d){
-  //   return updateChoro(indicator);
-  // });
-
   d3.selectAll("."+indicator_class).on("mouseover", function(d){
-    // d3.selectAll("."+indicator_class+".key")
-    //   .attr("background-color", "red")
-    //   .attr("border", "double");
+
     d3.selectAll("."+indicator_class+".key_text")
       .attr("fill", "white");
+
   });
 
   d3.selectAll("."+indicator_class).on("mouseout", function(d){
-    // d3.selectAll("."+indicator_class+".key")
-    //   .attr("background-color", "red");
+
     d3.selectAll("."+indicator_class+".key_text")
       .attr("fill", "#000");
+
   });
 
   tmp = [-100000,-100000];
@@ -404,7 +393,6 @@ function ready(error, blocks, hoods) {
 
   features_bg = topojson.feature(blocks, blocks.objects.bg_09_16_sj);
   bbox = path.bounds(features_bg);
-  console.log(bbox);
 
   if (error) throw error;
 
@@ -490,11 +478,11 @@ function ready(error, blocks, hoods) {
 
   map_svg_g.append("svg:image")
     .attrs({
-      'xlink:href': 'data/Roads_Pretty-02.png',
+      'xlink:href': 'data/Roads_Pretty-02_light.png',
       x: bbox[0][0],
       y: bbox[0][1],
       width: 572.3,
-      opacity: 0.6
+      opacity: 0.5
     })
     .classed("zoomable","true");
 

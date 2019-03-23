@@ -3,17 +3,24 @@
 <head>
   <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
 </head>
-<!-- <input id=year1 type="button" class="btn btn-outline-dark" aria-pressed="true" value="2006-2009">
-<input id=year2 type="button" class="btn btn-outline-dark focus" aria-pressed="true" value="2012-2016"> -->
 <div id=all>
   <div id=explainer_container>
     <h2>Changes in DC Neighborhoods, by the block</h2>
-    <!-- <h3>Subtitle</h3> -->
-    <p></p>
+    <p>
+      This map uses data from the <em>American Community Surveys</em> to explore the changing dynamics of DC neighborhoods, showing whether a block group underwent a <b style="color:#8e0152">decrease</b> or <b style="color:#276419">increase</b> in specific socio-economic indicators.
+    </p>
   </div>
   <div id=legend_container>
-    <span id=neighborhood_name></span>
-    <span id=block_name>Click on a block to see changes for all indicators</span>
+    <h6>Percent Change in </h6>
+    <select name="indicators" id="selector"></select>
+    <h6>from 2009 to 2016</h6>
+  </div>
+  <div id=indicators_container>
+    <p>
+      Click on another block to see changes in each indicator from 2009 to 2016.
+    </p>
+    <h5 id=neighborhood_name></h5>
+    <h5 id=block_name></h5>
   </div>
   <div id=map_container>
     <div id="tooltip" class="hidden">
@@ -24,7 +31,6 @@
       </p>
     </div>
   </div>
-<!-- <svg id=map_container width="1000" height="800"></svg> -->
 </div>
 
 <!-- Latest compiled and minified CSS -->

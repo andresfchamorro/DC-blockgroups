@@ -15,7 +15,7 @@ var map_svg_g = map_svg.append("g");
 var proj = d3.geoConicConformal()
   .parallels([38 + 18 / 60, 39 + 27 / 60])
   .rotate([77, 0])
-  .center([0.04, 38.95])
+  .center([0.04, 38.93])
   .scale(200000);
 
 const zoom = d3.zoom()
@@ -87,12 +87,10 @@ for (each in col_range) {
   color_array.push(newcol);
 }
 
-// d3.schemePuOr[8]
 var scheme_pu_or = d3.schemePuOr[8]
 var scheme_pi_gr = d3.schemePiYG[8]
 var scheme_pu_gr = d3.schemePRGn[8]
 var scheme_br_bg = d3.schemeBrBG[8]
-
 
 var scheme_brown_blue = ["#0f354a","#4881a1","#7eb7d6","#c0ecff",
 "#f7e1d7","#febc99","#aa6c4f","#410302"]
@@ -114,10 +112,14 @@ indicators['rent'] = ["Median Rent","rent_",160,range_rent,x_rent,formatLong];
 indicators['value'] = ["Median House Value","value_",220,range_val,x_val,formatK];
 indicators['income'] = ["Median Annual Income","income_",280,range_inc,x_inc,formatK];
 
-var g_legend = map_svg.append("g")
-    // .attr("transform", "translate(175," + "420" + ")")
-    .attr("transform", "translate(140," + "480" + ")")
-    .attr("class","legend");
+var legend_svg = d3.select("#legend_container")
+  .append("svg")
+  .attr("width", 200)
+  .attr("height", 500)
+  .attr("id","leg_svg");
+
+var g_legend = legend_svg.append("g")
+    .attr("transform", "translate(60," + "40" + ")");
 
 g_legend.call(d3.axisLeft(y_change)
     .tickSize(18)
@@ -142,29 +144,6 @@ g_legend.selectAll("rect")
     .attr("height", function(d) { return y_change(d[0]) - y_change(d[1]); })
     .attr("fill", function(d) { return color_change(d[0]); });
 
-g_legend.append("text")
-    .attr("class", "caption")
-    .attr("x", "-120")
-    .attr("y", "-40")
-    .attr("fill", "#000")
-    .attr("text-anchor", "start")
-    .attr("font-weight", "bold")
-    .attr("font-size","14px")
-    .text('% change from')
-    .attr("pointer-events","none")
-    .style("background-color","red");
-
-g_legend.append("text")
-    .attr("class", "caption")
-    .attr("x", "-120")
-    .attr("y", "-20")
-    .attr("fill", "#000")
-    .attr("text-anchor", "start")
-    .attr("font-weight", "bold")
-    .attr("font-size","14px")
-    .text('2009 to 2016')
-    .attr("pointer-events","none");
-
 function createLegend(indicator){
 
   name = indicators[indicator][0];
@@ -174,9 +153,14 @@ function createLegend(indicator){
   x_scale = indicators[indicator][4];
   format = indicators[indicator][5];
 
+  d3.select("#selector")
+    .append("option")
+    .text(name)
+    .attr("value",indicator);
+
   var indicator_class = indicator+"_sel"
 
-  var indicator_div = d3.select("#legend_container")
+  var indicator_div = d3.select("#indicators_container")
     .append("div")
     .attr("class",indicator_class+" key")
     .on("click", function(d){
@@ -301,7 +285,7 @@ function updateChoro(indicator){
   bg = map_svg_g.selectAll(".bg")
     .style("fill",function(d){
       if(+d.properties[indicator_t1]==0 || +d.properties[indicator_t2]==0 ){
-        return "#DEDEDE";
+        return "none";
       }
       else{
         delta = (d.properties[indicator_t2] - d.properties[indicator_t1]) / d.properties[indicator_t1]
@@ -316,10 +300,9 @@ function updateAllCircles(bg_data){
     updateCircles(each,bg_data);
   }
   d3.selectAll("#neighborhood_name")
-  .text(bg_data.properties.NAME+',');  
+  .text(bg_data.properties.NAME+',');
   d3.selectAll("#block_name")
     .text(" "+bg_data.properties.NAMELSAD);
-
 }
 
 function updateCircles(indicator,bg_data){
@@ -372,19 +355,15 @@ function updateCircles(indicator,bg_data){
   }
 
 }
-/*
-Ideally here I would select another element (a marker, not circle),
-and update it's locatino based on the midpoint (average of t1 and t2)
-I would also need to update the direction based on wether t2 - t1 is pos or neg
-And make sure all of these transitions are smooth
-see: http://bl.ocks.org/tomgp/d59de83f771ca2b6f1d4
-http://bl.ocks.org/dustinlarimer/5888271
-*/
-
 
 for (each in indicators){
   createLegend(each);
 }
+
+d3.select("#selector").on("change", function(){
+          indicator=this.value;
+          updateChoro(indicator);
+        });
 
 d3.queue()
     .defer(d3.json, "data/bg_09_16_sj.json")
@@ -470,8 +449,7 @@ function ready(error, blocks, hoods) {
       .on("mouseout", function(){
         d3.select("#tooltip")
           .classed("hidden", true);
-      })
-      .classed("zoomable","true");
+      });
 
   map_svg_g.append("svg:image")
     .attrs({
@@ -479,9 +457,8 @@ function ready(error, blocks, hoods) {
       x: bbox[0][0],
       y: bbox[0][1],
       width: 572.3,
-      opacity: 0.8
-    })
-    .classed("zoomable","true");
+      opacity: 1
+    });
 
   map_svg_g.append("svg:image")
     .attrs({
@@ -490,8 +467,7 @@ function ready(error, blocks, hoods) {
       y: bbox[0][1],
       width: 572.3,
       opacity: 0.5
-    })
-    .classed("zoomable","true");
+    });
 
   g_labels = map_svg_g.append("g")
 
@@ -506,9 +482,33 @@ function ready(error, blocks, hoods) {
     .text(function(d){
       return d.properties.NAME;
     })
-    .classed("zoomable","true");
+    .call(wrap, 70);
 
   updateChoro("homeownership");
-  updateAllCircles(features_bg.features[100]);
+  updateAllCircles(features_bg.features[150]);
+
+  function wrap(text, width) {
+    text.each(function() {
+      var text = d3.select(this),
+          words = text.text().split(/\s+/).reverse(),
+          word,
+          line = [],
+          lineNumber = 0,
+          lineHeight = 1.1, // ems
+          y = text.attr("y"),
+          dy = 0.025,
+          tspan = text.text(null).append("tspan").attr("x", 0).attr("y", y).attr("dy", dy + "em")
+      while (word = words.pop()) {
+        line.push(word)
+        tspan.text(line.join(" "))
+        if (tspan.node().getComputedTextLength() > width) {
+          line.pop()
+          tspan.text(line.join(" "))
+          line = [word]
+          tspan = text.append("tspan").attr("x", 0).attr("y", y).attr("dy", `${++lineNumber * lineHeight + dy}em`).text(word)
+        }
+      }
+    })
+  }
 
 }

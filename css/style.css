@@ -8,20 +8,20 @@
 #indicators_container{
   position: absolute;
   right: 20px;
-  top: 60px;
+  top: 50px;
   width: 400px;
   height: 100%;
   background-color: transparent;
 }
 #explainer_container{
   position: absolute;
-  left: 60px;
-  top: 60px;
+  left: 20px;
+  top: 50px;
   width: 260px;
 }
 #legend_container{
   position: absolute;
-  left: 60px;
+  left: 20px;
   top: 360px;
 }
 #indicators_container p{
